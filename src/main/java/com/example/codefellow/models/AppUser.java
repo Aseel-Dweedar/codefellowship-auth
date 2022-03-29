@@ -9,7 +9,7 @@ import java.util.Collection;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 public class AppUser implements UserDetails {
 
@@ -20,6 +20,11 @@ public class AppUser implements UserDetails {
     private String password;
     @Column(unique = true , nullable = false )
     private String username;
+
+    public AppUser(String username, String password) {
+        this.username=username;
+        this.password=password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
