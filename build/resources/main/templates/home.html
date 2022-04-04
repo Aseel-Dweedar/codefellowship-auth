@@ -7,7 +7,19 @@
 <body>
 home
 
+<div th:each="user : ${users}" >
+    <a  th:href="@{/profile(id=${user.id})}">
+        <h3 th:text="${user.username}"></h3>
+    </a>
+</div>
+
 <form action="/perform_logout" method="post">
+    <input type="submit" value="logout">
+</form>
+
+<form action="/addpost" method="post">
+    <label for="body">POST HERE</label>
+    <input type="test" name="body" id="body" >
     <input type="submit">
 </form>
 

@@ -1,12 +1,15 @@
 package com.example.codefellow.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
+@JsonIgnoreProperties({"posts"})
 @Setter
 @Getter
 @NoArgsConstructor
@@ -20,6 +23,8 @@ public class AppUser implements UserDetails {
     private String password;
     @Column(unique = true , nullable = false )
     private String username;
+    @OneToMany(mappedBy = "user")
+    List<Post> posts;
 
     public AppUser(String username, String password) {
         this.username=username;
