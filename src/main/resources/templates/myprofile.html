@@ -7,11 +7,27 @@
 <body>
 <h4 th:text="${me.username}" ></h4>
 
+<h5>My Posts</h5>
 <div th:each="post : ${me.posts}" >
     <p th:text="${post.body}" ></p>
     <p th:text="${post.createdAt}" ></p>
     <p> **************************************************** </p>
 </div>
+
+<hr>
+
+<h5>Other user posts</h5>
+<div th:each="follow : ${me.following}">
+
+    <div th:each="post : ${follow.posts}">
+        <p>USer : <span th:text="${post.user.username}" ></span></p>
+    <p th:text="${post.body}" ></p>
+    <p th:text="${post.createdAt}" ></p>
+    <p> ///////////////////////////////////// </p>
+
+
+</div>
+
 
 </body>
 </html>

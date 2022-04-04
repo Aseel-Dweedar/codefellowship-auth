@@ -11,6 +11,9 @@ home
     <a  th:href="@{/profile(id=${user.id})}">
         <h3 th:text="${user.username}"></h3>
     </a>
+    <form th:action="@{/follow(id=${user.id})}"method="post">
+        <input type="submit" value="FOLLOW">
+    </form>
 </div>
 
 <form action="/perform_logout" method="post">

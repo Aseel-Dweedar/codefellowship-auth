@@ -25,6 +25,16 @@ public class AppUser implements UserDetails {
     private String username;
     @OneToMany(mappedBy = "user")
     List<Post> posts;
+    @ManyToMany
+    @JoinTable(
+            name = "user_user",
+            joinColumns = {@JoinColumn(name = "from_id")},
+            inverseJoinColumns = {@JoinColumn(name = "to_id")}
+    )
+    public List<AppUser> following;
+
+    @ManyToMany(mappedBy = "following", fetch = FetchType.EAGER)
+    public List<AppUser> followers;
 
     public AppUser(String username, String password) {
         this.username=username;

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<h1>All feeds</h1>
+
+<div th:each="post : ${posts}" >
+    <p th:text="${post.body}" ></p>
+    <p th:text="${post.createdAt}" ></p>
+    <a  th:href="@{/profile(id=${post.user.id})}">
+        <h5 th:text="${post.user.username}"></h5>
+    </a>
+    <p> **************************************************** </p>
+</div>
+
+</body>
+</html>

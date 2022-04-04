@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 public class Controllers {
@@ -31,16 +32,23 @@ public class Controllers {
     PostRepo postRepo;
 
     @GetMapping("/")
-    String home(Model model) {
-        model.addAttribute("users" , appUserRepo.findAll());
+    String home(Model model, Principal p) {
+
+        AppUser currentUser = appUserRepo.findByUsername(p.getName());
+        List<AppUser> users = appUserRepo.findAll();
+        users.remove(currentUser);
+        for (AppUser user : currentUser.getFollowing()) {
+            users.remove(user);
+        }
+        model.addAttribute("users" , users);
         return "home";
     }
 
-    @ResponseBody
     @GetMapping("/profile")
-    AppUser profile(@RequestParam Integer id ) {
+    String profile(@RequestParam Integer id , Model model) {
         AppUser user = appUserRepo.findById(id).get();
-        return user;
+        model.addAttribute("user" , user);
+        return "profile";
     }
 
     @GetMapping("/myprofile")
@@ -53,6 +61,13 @@ public class Controllers {
     @GetMapping("/post")
     String post() {
         return "post";
+    }
+
+    @GetMapping("/feed")
+    String allPosts(Model model){
+        List<Post> posts = postRepo.findAll();
+        model.addAttribute("posts" , posts);
+        return "feed";
     }
 
     @GetMapping("/login")
@@ -86,6 +101,25 @@ public class Controllers {
         postRepo.save(post);
 
         return new RedirectView("/");
+    }
+
+    @PostMapping("/follow")
+    RedirectView followUser(Principal p , @RequestParam Integer id ){
+
+        AppUser userToFollow = appUserRepo.findById(id).get();
+
+        AppUser currentUser = appUserRepo.findByUsername(p.getName());
+
+        userToFollow.getFollowers().add(currentUser);
+
+        currentUser.getFollowing().add(userToFollow);
+
+        appUserRepo.save(currentUser);
+
+        appUserRepo.save(userToFollow);
+
+        return new RedirectView("/");
+
     }
 
 }
